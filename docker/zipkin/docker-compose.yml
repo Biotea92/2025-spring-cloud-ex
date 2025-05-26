@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  zipkin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: my-zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    environment:
+      - STORAGE_TYPE=mem
+      # 메모리 설정 (필요에 따라 조정)
+      - JAVA_OPTS=-Xms512m -Xmx512m
+    networks:
+      - zipkin-network
+    restart: unless-stopped
+
+networks:
+  zipkin-network:
+    driver: bridge
