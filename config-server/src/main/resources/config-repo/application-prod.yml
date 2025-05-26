@@ -1,0 +1,5 @@
+# 프로덕션 환경 전용 설정
+management:
+  tracing:
+    sampling:
+      probability: 0.1  # 프로덕션 환경에서는 10%만 추적
