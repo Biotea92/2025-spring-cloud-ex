@@ -1,36 +1,54 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.5.0"
-    id("io.spring.dependency-management") version "1.1.7"
+    id("org.springframework.boot") version "3.4.6" apply false
+    id("io.spring.dependency-management") version "1.1.7" apply false
 }
 
-group = "com.study"
-version = "0.0.1-SNAPSHOT"
+allprojects {
+    group = "com.study"
+    version = "0.0.1-SNAPSHOT"
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+    repositories {
+        mavenCentral()
     }
 }
 
-configurations {
-    compileOnly {
-        extendsFrom(configurations.annotationProcessor.get())
+subprojects {
+    apply(plugin = "java")
+    apply(plugin = "org.springframework.boot")
+    apply(plugin = "io.spring.dependency-management")
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
     }
-}
 
-repositories {
-    mavenCentral()
-}
+    ext {
+        set("springCloudVersion", "2024.0.0")
+    }
 
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
+    // 스프링 클라우드 의존성 관리
+    the<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension>().apply {
+        imports {
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${project.ext["springCloudVersion"]}")
+        }
+    }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+    configurations {
+        compileOnly {
+            extendsFrom(configurations.annotationProcessor.get())
+        }
+    }
+
+    dependencies {
+        compileOnly("org.projectlombok:lombok")
+        annotationProcessor("org.projectlombok:lombok")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }
