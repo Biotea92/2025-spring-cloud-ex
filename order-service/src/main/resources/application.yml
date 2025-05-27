@@ -30,6 +30,11 @@ resilience4j:
       orderService:
         maxAttempts: 3
         waitDuration: 1s
+  bulkhead:
+    instances:
+      orderService:
+        maxConcurrentCalls: 10
+        maxWaitDuration: 10ms
 
 feign:
   client:
