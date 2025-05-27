@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  # Zipkin 서비스
+  zipkin:
+    build:
+      context: ./zipkin
+      dockerfile: Dockerfile
+    image: my-zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    environment:
+      - STORAGE_TYPE=mem
+      - JAVA_OPTS=-Xms512m -Xmx512m
+    networks:
+      - microservices-network
+    restart: unless-stopped
+
+  # Redis 서비스
+  redis:
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    image: my-redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - microservices-network
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  microservices-network:
+    driver: bridge

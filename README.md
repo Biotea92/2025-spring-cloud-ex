@@ -90,8 +90,19 @@
    - 폴백 메소드
    - 재시도
 
+## 추가된 기능
+
+1. **API 게이트웨이 속도 제한**
+   - IP 주소 기반 요청 제한
+   - Redis를 사용한 속도 제한 구현
+   - 초당 10개 요청, 최대 버스트 20개 요청 허용
+
+2. **분산 추적 (Zipkin)**
+   - 모든 서비스에 분산 추적 설정 적용
+   - Zipkin 서버 Docker 설정 제공
+   - 실행 방법은 `docker/zipkin/README.md` 참조
+
 ## 다음 단계로 학습할 수 있는 Spring Cloud 기능
 
 - Spring Cloud Stream (메시징)
-- Spring Cloud Sleuth & Zipkin (분산 추적)
-- Spring Cloud Security (보안)
+- Spring Cloud Config Server Git 백엔드 연동
